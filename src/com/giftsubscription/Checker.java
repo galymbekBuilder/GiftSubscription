@@ -59,6 +59,6 @@ class PasswordChecker extends Checker<String> {
 
     @Override
     public boolean isValid(UserStorage userStorage) {
-        return userStorage.containsPassword(value, mail);
+        return userStorage.containsPassword(mail, value);
     }
 }

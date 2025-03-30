@@ -1,16 +1,21 @@
 package com.giftsubscription;
 
-import java.util.HashMap;
-import java.util.Map;
 import java.util.Scanner;
 
 public class Account {
     User user;
     boolean isValid = true;
-    UserStorage userStorage = new UserStorage();
+    private final UserStorage userStorage;
+    Scanner scanner;
+    Subscription subscription;
+
+    Account(UserStorage userStorage, Scanner scanner) {
+        this.userStorage = userStorage;
+        this.scanner = scanner;
+        subscription = Subscription.STANDART;
+    }
 
     public void registration() {
-        Scanner scanner = new Scanner(System.in);
         isValid = true;
         System.out.println("Введите ваше имя: ");
         String name = scanner.nextLine();
@@ -22,7 +27,7 @@ public class Account {
         String password = scanner.nextLine();
 
         Checker<String> mailChecker = new MailChecker(mail, ValidationMode.REGISTRATION);
-        if(mailChecker.isValid(userStorage)) {
+        if(!mailChecker.isValid(userStorage)) {
             isValid = false;
             System.out.println(mailChecker.getErrorMessage());
         }
@@ -42,7 +47,6 @@ public class Account {
     }
 
     public void authorization() {
-            Scanner scanner = new Scanner(System.in);
             isValid = true;
             System.out.println("Введите вашу почту: ");
             String mail = scanner.nextLine();
@@ -52,15 +56,12 @@ public class Account {
             if(!mailChecker.isValid(userStorage)) {
                 isValid = false;
                 System.out.println(mailChecker.getErrorMessage());
-            } else {
-                isValid = true;
             }
+
             Checker<String> passwordChecker = new PasswordChecker(password, mail);
             if(!passwordChecker.isValid(userStorage)) {
                 isValid = false;
                 System.out.println(passwordChecker.getErrorMessage());
-            } else {
-                isValid = true;
             }
 
             if(isValid) {
@@ -73,7 +74,13 @@ public class Account {
     }
 
     public void aboutAccount() {
-
+        System.out.println(user.toString());
+        // какая подписка стоит, изменить данные, пополнить баланс, выйти из системы
+        switch (subscription) {
+            case STANDART -> System.out.println("На текущий момент у вас отсутствует подписка!");
+            case PREMIUM -> System.out.println("У вас тип подписки Премиум!");
+            case VIP -> System.out.println("У вас тип подписки Вип!");
+        }
     }
     public void buySubscription() {
 
